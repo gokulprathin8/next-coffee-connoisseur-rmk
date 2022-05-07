@@ -2,8 +2,19 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Banner from "../components/banner";
+import Card from "../components/card";
 
-export default function Home() {
+import coffeeStores from "../data/coffee-stores.json";
+
+export async function getStaticProps(context) {
+    return {
+        props: {
+            coffeeStores
+        }
+    }
+}
+
+export default function Home(props) {
     const handleOnBannerBtnClick = () => {
         console.log('button clicked');
     }
@@ -21,6 +32,22 @@ export default function Home() {
             buttonText="View stores nearby"
             handleButtonClick={handleOnBannerBtnClick}
         />
+          <div className={styles.heroImage}>
+              <Image src="/static/hero-image.png" width={700} height={400} alt="hero-image"/>
+          </div>
+          <div className={styles.cardLayout}>
+              {props.coffeeStores.map(coffeeStore => {
+                  return (
+                      <Card
+                          key={coffeeStore.id}
+                          imageURL={coffeeStore.imgUrl}
+                          name={coffeeStore.name}
+                          href={`/coffee-store/${coffeeStore.id}`}
+                          className={styles.card}
+                      />
+                  )
+              })}
+          </div>
       </main>
     </div>
   )
