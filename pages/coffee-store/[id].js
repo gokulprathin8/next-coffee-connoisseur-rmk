@@ -24,11 +24,11 @@ export async function getStaticProps(staticProps) {
 export async function getStaticPaths() {
     const coffeeStores = await fetchCoffeeStores();
     const paths = coffeeStores.map(coffeeStore => {
-    return {
-        params: {
-            id: coffeeStore.fsq_id
+        return {
+            params: {
+                id: coffeeStore.fsq_id
+            }
         }
-    }
     })
     return {
         paths:  paths,
@@ -57,7 +57,7 @@ const CoffeeStore = (props) => {
                 <div className={styles.nameWrapper}>
                     <p className={styles.name}>{props.coffeeStores.name}</p>
                 </div>
-                <Image src={props.coffeeStores.imgUrl || 'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'} width={600} height={360} className={styles.storeImg} alt="store-image" />
+                <Image src={props.coffeeStores.imgUrl} width={600} height={360} className={styles.storeImg} alt="store-image" />
             </div>
 
             <div className={cls('glass', styles.col2)}>
