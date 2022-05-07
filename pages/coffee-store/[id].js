@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import coffeeStoresData from '../../data/coffee-stores.json';
-import Head from "next/Head";
+import Head from "next/head";
 
 export function getStaticProps(staticProps) {
     const params = staticProps.params;
