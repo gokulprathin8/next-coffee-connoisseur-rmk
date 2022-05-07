@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import Banner from "../components/banner";
 import Card from "../components/card";
 
-import coffeeStores from "../data/coffee-stores.json";
+// import coffeeStores from "../data/coffee-stores.json";
 import {fetchCoffeeStores} from "../lib/coffee-stores";
 
 export async function getStaticProps(context) {
@@ -12,7 +12,7 @@ export async function getStaticProps(context) {
     const coffeeStores = await fetchCoffeeStores();
     return {
         props: {
-            coffeeStores: coffeeStores.results
+            coffeeStores: coffeeStores
         }
     }
 }
@@ -38,16 +38,16 @@ export default function Home(props) {
           <div className={styles.heroImage}>
               <Image src="/static/hero-image.png" width={700} height={400} alt="hero-image"/>
           </div>
-          {coffeeStores.length > 0 && <div>
+          {props.coffeeStores.length > 0 && <div>
               <h2 className={styles.heading2}>Toronto Store</h2>
               <div className={styles.cardLayout}>
                   {props.coffeeStores.map(coffeeStore => {
                       return (
                           <Card
                               key={coffeeStore.fsq_id}
-                              imageURL={coffeeStore.imgUrl || 'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'}
+                              imageURL='https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
                               name={coffeeStore.name}
-                              href={`/coffee-store/${coffeeStore.id}`}
+                              href={`/coffee-store/${coffeeStore.fsq_id}`}
                               className={styles.card}
                           />
                       )
