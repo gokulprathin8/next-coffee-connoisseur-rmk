@@ -52,7 +52,7 @@ const CoffeeStore = (props) => {
         <div className={styles.container}>
             <div className={styles.col1}>
                 <div className={styles.backToHomeLink}>
-                    <Link href="/" scroll={false}>Back to home</Link>
+                    <Link href="/" scroll={false}>← Back to home</Link>
                 </div>
                 <div className={styles.nameWrapper}>
                     <p className={styles.name}>{props.coffeeStores.name}</p>

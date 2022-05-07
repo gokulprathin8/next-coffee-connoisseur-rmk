@@ -6,6 +6,7 @@ import Card from "../components/card";
 
 // import coffeeStores from "../data/coffee-stores.json";
 import {fetchCoffeeStores} from "../lib/coffee-stores";
+import useTrackLocation from "../hooks/use-track-location";
 
 export async function getStaticProps(context) {
 
@@ -18,8 +19,11 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
+    const {handleTrackLocation, latLong, locationErrorMsg} = useTrackLocation();
+
     const handleOnBannerBtnClick = () => {
-        console.log('button clicked');
+        handleTrackLocation();
+        console.log(latLong);
     }
 
   return (
