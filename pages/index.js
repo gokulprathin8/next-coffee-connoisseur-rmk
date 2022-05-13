@@ -21,6 +21,7 @@ export async function getStaticProps(context) {
 
 export default function Home(props) {
     const [coffeeStores, setCoffeeStores] = useState('');
+    const [coffeeStoresErr, setCoffeeStoresErr] = useState(null);  // show error somewhere on UI later
     const {handleTrackLocation, latLong, locationErrorMsg} = useTrackLocation();
 
     const handleOnBannerBtnClick = () => {
@@ -36,6 +37,7 @@ export default function Home(props) {
                 console.log({ fetchedCoffeeStores });
             } catch (err) {
                 // set error
+                setCoffeeStoresErr(err.message);
                 console.log(err);
             }
         }
