@@ -7,6 +7,7 @@ import Card from "../components/card";
 // import coffeeStores from "../data/coffee-stores.json";
 import {fetchCoffeeStores} from "../lib/coffee-stores";
 import useTrackLocation from "../hooks/use-track-location";
+import {useEffect, useState} from "react";
 
 export async function getStaticProps(context) {
 
@@ -19,12 +20,30 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
+    const [coffeeStores, setCoffeeStores] = useState('');
     const {handleTrackLocation, latLong, locationErrorMsg} = useTrackLocation();
 
     const handleOnBannerBtnClick = () => {
         handleTrackLocation();
         console.log(latLong);
     }
+
+    const fetchCoffeeStoresEffect = async () => {
+        if (latLong) {
+            try {
+                const fetchedCoffeeStores = await fetchCoffeeStores();
+                setCoffeeStores(fetchedCoffeeStores);
+                console.log({ fetchedCoffeeStores });
+            } catch (err) {
+                // set error
+                console.log(err);
+            }
+        }
+    }
+
+    useEffect( () => {
+        fetchCoffeeStoresEffect().then(r => console.log(r));
+    }, [latLong])
 
   return (
     <div className={styles.container}>
@@ -42,6 +61,24 @@ export default function Home(props) {
           <div className={styles.heroImage}>
               <Image src="/static/hero-image.png" width={700} height={400} alt="hero-image"/>
           </div>
+
+          {coffeeStores.length > 0 && <div>
+              <h2 className={styles.heading2}>Stores near me</h2>
+              <div className={styles.cardLayout}>
+                  {coffeeStores.map(coffeeStore => {
+                      return (
+                          <Card
+                              key={coffeeStore.fsq_id}
+                              imageURL={coffeeStore.imgUrl}
+                              name={coffeeStore.name}
+                              href={`/coffee-store/${coffeeStore.fsq_id}`}
+                              className={styles.card}
+                          />
+                      )
+                  })}
+              </div>
+          </div>}
+
           {props.coffeeStores.length > 0 && <div>
               <h2 className={styles.heading2}>Toronto Store</h2>
               <div className={styles.cardLayout}>
