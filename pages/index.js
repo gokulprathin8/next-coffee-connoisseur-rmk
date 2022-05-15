@@ -7,7 +7,8 @@ import Card from "../components/card";
 // import coffeeStores from "../data/coffee-stores.json";
 import {fetchCoffeeStores} from "../lib/coffee-stores";
 import useTrackLocation from "../hooks/use-track-location";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {ACTION_TYPE, StoreContext} from "./_app";
 
 export async function getStaticProps(context) {
 
@@ -20,32 +21,38 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
-    const [coffeeStores, setCoffeeStores] = useState('');
+    // const [coffeeStores, setCoffeeStores] = useState('');
     const [coffeeStoresErr, setCoffeeStoresErr] = useState(null);  // show error somewhere on UI later
-    const {handleTrackLocation, latLong, locationErrorMsg} = useTrackLocation();
+    const {handleTrackLocation, locationErrorMsg} = useTrackLocation();
+
+    const {dispatch, state} = useContext(StoreContext);
+    const { coffeeStores, latLong } = state;
 
     const handleOnBannerBtnClick = () => {
+        console.log(coffeeStores, 'coffeeStore');
         handleTrackLocation();
-        console.log(latLong);
-    }
-
-    const fetchCoffeeStoresEffect = async () => {
-        if (latLong) {
-            try {
-                const fetchedCoffeeStores = await fetchCoffeeStores();
-                setCoffeeStores(fetchedCoffeeStores);
-                console.log({ fetchedCoffeeStores });
-            } catch (err) {
-                // set error
-                setCoffeeStoresErr(err.message);
-                console.log(err);
-            }
-        }
     }
 
     useEffect( () => {
+        const fetchCoffeeStoresEffect = async () => {
+            if (latLong) {
+                try {
+                    const fetchedCoffeeStores = await fetchCoffeeStores();
+                    dispatch({
+                        type: ACTION_TYPE.SET_COFFEE_STORES,
+                        payload: {coffeeStores: fetchedCoffeeStores}
+                    })
+                    // setCoffeeStores(fetchedCoffeeStores);
+                    console.log({ fetchedCoffeeStores });
+                } catch (err) {
+                    // set error
+                    setCoffeeStoresErr(err.message);
+                    console.log(err);
+                }
+            }
+        }
         fetchCoffeeStoresEffect().then(r => console.log(r));
-    }, [latLong])
+    }, [dispatch, latLong])
 
   return (
     <div className={styles.container}>
